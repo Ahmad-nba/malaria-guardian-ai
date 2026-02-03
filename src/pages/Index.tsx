@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Phone, LayoutDashboard, Shield, Activity } from 'lucide-react';
+import { Phone, LayoutDashboard, Shield, Activity, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { USSDSimulator } from '@/components/USSDSimulator';
 import { PatientCard } from '@/components/PatientCard';
 import { DashboardStats } from '@/components/DashboardStats';
@@ -69,14 +71,22 @@ const Index = () => {
       {/* Header */}
       <header className="dashboard-header text-primary-foreground">
         <div className="container py-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary-foreground/20 rounded-lg">
-              <Shield className="w-6 h-6" />
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary-foreground/20 rounded-lg">
+                <Shield className="w-6 h-6" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold">Malaria Risk Prioritization Agent</h1>
+                <p className="text-primary-foreground/80 text-sm">Mukono Health Centre III</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold">Malaria Risk Prioritization Agent</h1>
-              <p className="text-primary-foreground/80 text-sm">Mukono Health Centre III</p>
-            </div>
+            <Link to="/vht">
+              <Button variant="secondary" size="sm" className="gap-2">
+                <Users className="w-4 h-4" />
+                VHT View
+              </Button>
+            </Link>
           </div>
           <p className="text-sm text-primary-foreground/70 mt-2 max-w-2xl">
             Autonomous system for prioritizing malaria risk among pregnant women. 
