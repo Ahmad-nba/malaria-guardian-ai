@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Phone, Send } from 'lucide-react';
 import type { USSDData } from '@/types/patient';
+import type { Language } from '@/lib/translations';
+import { t } from '@/lib/translations';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { VoiceInputButton } from './VoiceInputButton';
 
 type USSDStep = 
   | 'idle'
   | 'welcome'
   | 'name'
+  | 'age'
   | 'village'
   | 'fever'
   | 'headache'
@@ -16,7 +21,7 @@ type USSDStep =
   | 'complete';
 
 interface USSDSimulatorProps {
-  onSubmit: (name: string, village: string, data: USSDData) => void;
+  onSubmit: (name: string, village: string, age: number, data: USSDData) => void;
 }
 
 export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
@@ -24,9 +29,11 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
   const [input, setInput] = useState('');
   const [displayLines, setDisplayLines] = useState<string[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [language, setLanguage] = useState<Language>('en');
   
   // Form data
   const [patientName, setPatientName] = useState('');
+  const [patientAge, setPatientAge] = useState(0);
   const [village, setVillage] = useState('');
   const [symptoms, setSymptoms] = useState({
     fever: false,
@@ -55,17 +62,31 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
     setStep('welcome');
     typeMessage([
       '════════════════════════',
-      '  MALARIA RISK AGENT',
-      '  Mukono HC III',
+      `  ${t('ussd.title', language)}`,
+      `  ${t('ussd.subtitle', language)}`,
       '════════════════════════',
       '',
-      'Welcome to the Malaria',
-      'Risk Reporting Service.',
+      t('ussd.welcome', language),
       '',
-      'Press 1 to report symptoms',
-      'Press 2 for health tips',
+      t('ussd.press1', language),
+      t('ussd.press2', language),
       '',
     ]);
+  };
+
+  const handleVoiceResult = (transcript: string) => {
+    // Parse voice input for yes/no responses
+    const lower = transcript.toLowerCase();
+    let value = transcript;
+    
+    // Handle yes/no in multiple languages
+    if (lower.includes('yes') || lower.includes('yee') || lower.includes('ndiyo') || lower.includes('one') || lower === '1') {
+      value = '1';
+    } else if (lower.includes('no') || lower.includes('nedda') || lower.includes('hapana') || lower.includes('two') || lower === '2') {
+      value = '2';
+    }
+    
+    setInput(value);
   };
 
   const handleInput = () => {
@@ -82,34 +103,57 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
           typeMessage([
             '',
             '────────────────────────',
-            'STEP 1: IDENTIFICATION',
+            t('ussd.step1', language),
             '────────────────────────',
             '',
-            'Enter your full name:',
+            t('ussd.enterName', language),
             '',
           ]);
         } else if (value === '2') {
           typeMessage([
             '',
-            '• Sleep under treated nets',
-            '• Visit ANC regularly',
-            '• Report fever early',
+            `• ${t('ussd.tipNets', language)}`,
+            `• ${t('ussd.tipANC', language)}`,
+            `• ${t('ussd.tipFever', language)}`,
             '',
-            'Press 1 to report symptoms',
+            t('ussd.press1', language),
           ]);
         }
         break;
 
       case 'name':
         setPatientName(value);
-        setStep('village');
+        setStep('age');
         typeMessage([
           '',
-          `Name: ${value} ✓`,
+          `${t('ussd.name', language)}: ${value} ✓`,
           '',
-          'Enter your village name:',
+          t('ussd.enterAge', language),
           '',
         ]);
+        break;
+
+      case 'age':
+        const age = parseInt(value, 10);
+        if (isNaN(age) || age < 10 || age > 60) {
+          typeMessage([
+            '',
+            '⚠ Please enter a valid age (10-60)',
+            '',
+            t('ussd.enterAge', language),
+            '',
+          ]);
+        } else {
+          setPatientAge(age);
+          setStep('village');
+          typeMessage([
+            '',
+            `${t('ussd.age', language)}: ${age} ✓`,
+            '',
+            t('ussd.enterVillage', language),
+            '',
+          ]);
+        }
         break;
 
       case 'village':
@@ -117,14 +161,14 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
         setStep('fever');
         typeMessage([
           '',
-          `Village: ${value} ✓`,
+          `${t('ussd.village', language)}: ${value} ✓`,
           '',
           '────────────────────────',
-          'STEP 2: SYMPTOMS CHECK',
+          t('ussd.step2', language),
           '────────────────────────',
           '',
-          'Do you have FEVER?',
-          '(1 = Yes, 2 = No)',
+          t('ussd.haveFever', language),
+          t('ussd.yesNo', language),
           '',
         ]);
         break;
@@ -134,10 +178,10 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
         setStep('headache');
         typeMessage([
           '',
-          `Fever: ${value === '1' ? 'Yes ⚠' : 'No ✓'}`,
+          `${t('ussd.fever', language)}: ${value === '1' ? `${t('ussd.yes', language)} ⚠` : `${t('ussd.no', language)} ✓`}`,
           '',
-          'Do you have HEADACHE?',
-          '(1 = Yes, 2 = No)',
+          t('ussd.haveHeadache', language),
+          t('ussd.yesNo', language),
           '',
         ]);
         break;
@@ -147,10 +191,10 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
         setStep('bodyaches');
         typeMessage([
           '',
-          `Headache: ${value === '1' ? 'Yes ⚠' : 'No ✓'}`,
+          `${t('ussd.headache', language)}: ${value === '1' ? `${t('ussd.yes', language)} ⚠` : `${t('ussd.no', language)} ✓`}`,
           '',
-          'Do you have BODY ACHES?',
-          '(1 = Yes, 2 = No)',
+          t('ussd.haveBodyAches', language),
+          t('ussd.yesNo', language),
           '',
         ]);
         break;
@@ -160,10 +204,10 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
         setStep('fatigue');
         typeMessage([
           '',
-          `Body Aches: ${value === '1' ? 'Yes ⚠' : 'No ✓'}`,
+          `${t('ussd.bodyAches', language)}: ${value === '1' ? `${t('ussd.yes', language)} ⚠` : `${t('ussd.no', language)} ✓`}`,
           '',
-          'Do you feel very TIRED?',
-          '(1 = Yes, 2 = No)',
+          t('ussd.haveFatigue', language),
+          t('ussd.yesNo', language),
           '',
         ]);
         break;
@@ -173,15 +217,14 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
         setStep('bednet');
         typeMessage([
           '',
-          `Fatigue: ${value === '1' ? 'Yes ⚠' : 'No ✓'}`,
+          `${t('ussd.fatigue', language)}: ${value === '1' ? `${t('ussd.yes', language)} ⚠` : `${t('ussd.no', language)} ✓`}`,
           '',
           '────────────────────────',
-          'STEP 3: PREVENTION',
+          t('ussd.step3', language),
           '────────────────────────',
           '',
-          'Are you sleeping under a',
-          'treated mosquito net?',
-          '(1 = Yes, 2 = No)',
+          t('ussd.bedNet', language),
+          t('ussd.yesNo', language),
           '',
         ]);
         break;
@@ -192,17 +235,18 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
         setStep('confirmation');
         typeMessage([
           '',
-          `Bed-Net: ${bedNetUsage ? 'Yes ✓' : 'No ⚠'}`,
+          `${t('ussd.bedNetLabel', language)}: ${bedNetUsage ? `${t('ussd.yes', language)} ✓` : `${t('ussd.no', language)} ⚠`}`,
           '',
           '════════════════════════',
-          '    CONFIRM SUBMISSION',
+          `    ${t('ussd.confirm', language)}`,
           '════════════════════════',
           '',
-          `Name: ${patientName}`,
-          `Village: ${village}`,
+          `${t('ussd.name', language)}: ${patientName}`,
+          `${t('ussd.age', language)}: ${patientAge}`,
+          `${t('ussd.village', language)}: ${village}`,
           '',
-          'Press 1 to SUBMIT',
-          'Press 2 to CANCEL',
+          t('ussd.submit', language),
+          t('ussd.cancel', language),
           '',
         ]);
         break;
@@ -219,25 +263,21 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
           typeMessage([
             '',
             '════════════════════════',
-            '     ✓ SUBMITTED',
+            `     ✓ ${t('ussd.submitted', language)}`,
             '════════════════════════',
             '',
-            'Information received.',
-            'Your health team at',
-            'Mukono HC III has been',
-            'notified.',
+            t('ussd.received', language),
+            t('ussd.notified', language),
             '',
-            'If you feel worse,',
-            'visit the nearest',
-            'health centre.',
+            t('ussd.ifWorse', language),
             '',
-            'Stay healthy! 💚',
+            `${t('ussd.stayHealthy', language)} 💚`,
             '════════════════════════',
           ]);
           
           // Trigger the callback after animation
           setTimeout(() => {
-            onSubmit(patientName, village, ussdData);
+            onSubmit(patientName, village, patientAge, ussdData);
           }, 1500);
         } else {
           setStep('idle');
@@ -253,6 +293,22 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
     }
   };
 
+  const resetSimulator = () => {
+    setStep('idle');
+    setInput('');
+    setDisplayLines([]);
+    setPatientName('');
+    setPatientAge(0);
+    setVillage('');
+    setSymptoms({
+      fever: false,
+      headache: false,
+      bodyAches: false,
+      fatigue: false,
+      bedNetUsage: false,
+    });
+  };
+
   return (
     <div className="w-full max-w-sm mx-auto">
       {/* Phone Frame */}
@@ -265,7 +321,14 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
           {/* Status Bar */}
           <div className="flex items-center justify-between px-4 py-2 ussd-dim text-xs">
             <span>MTN UG</span>
-            <span>●●●●○</span>
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher 
+                currentLanguage={language} 
+                onLanguageChange={setLanguage}
+                variant="compact"
+              />
+              <span>●●●●○</span>
+            </div>
           </div>
           
           {/* USSD Display */}
@@ -273,8 +336,8 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
             {step === 'idle' ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <Phone className="w-12 h-12 mb-4 ussd-accent" />
-                <p className="ussd-text mb-2">Dial *161# to start</p>
-                <p className="ussd-dim text-xs">Malaria Risk Reporting</p>
+                <p className="ussd-text mb-2">{t('ussd.dialToStart', language)}</p>
+                <p className="ussd-dim text-xs">{t('ussd.malariaReporting', language)}</p>
               </div>
             ) : (
               <div className="space-y-0.5">
@@ -305,20 +368,33 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
               >
                 *161#
               </button>
+            ) : step === 'complete' ? (
+              <button
+                onClick={resetSimulator}
+                className="flex-1 bg-terminal-accent/20 hover:bg-terminal-accent/30 text-terminal-accent font-mono py-3 rounded-lg transition-colors font-semibold"
+              >
+                {t('ussd.complete', language)} ✓
+              </button>
             ) : (
               <>
+                <VoiceInputButton
+                  language={language}
+                  onResult={handleVoiceResult}
+                  disabled={isTyping}
+                  className="text-terminal-accent hover:bg-terminal-accent/20"
+                />
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder={step === 'complete' ? 'Complete' : 'Type response...'}
-                  disabled={step === 'complete' || isTyping}
+                  placeholder={t('ussd.typeResponse', language)}
+                  disabled={isTyping}
                   className="flex-1 bg-terminal-text/10 text-terminal-text placeholder:text-terminal-dim/50 px-4 py-3 rounded-lg font-mono text-sm focus:outline-none focus:ring-1 focus:ring-terminal-accent disabled:opacity-50"
                 />
                 <button
                   onClick={handleInput}
-                  disabled={step === 'complete' || isTyping || !input.trim()}
+                  disabled={isTyping || !input.trim()}
                   className="bg-terminal-accent/20 hover:bg-terminal-accent/30 text-terminal-accent p-3 rounded-lg transition-colors disabled:opacity-30"
                 >
                   <Send className="w-5 h-5" />
