@@ -22,6 +22,7 @@ export interface Patient {
   name: string;
   village: string;
   healthCentre: string;
+  age?: number;
   pregnancyWeek: number;
   ancVisits: number;
   lastANCDate: Date;

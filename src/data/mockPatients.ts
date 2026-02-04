@@ -148,6 +148,7 @@ export const mockPatients: Patient[] = [
 export function addNewPatient(
   name: string,
   village: string,
+  age: number,
   ussdData: Patient['ussdData']
 ): Patient {
   const id = `P${String(mockPatients.length + 1).padStart(3, '0')}`;
@@ -160,6 +161,7 @@ export function addNewPatient(
     pregnancyWeek: 20, // Default for new USSD registrations
     ancVisits: 0,
     lastANCDate: new Date(),
+    age,
     ussdData,
     trustData: [
       { level: 'medium', label: 'USSD Self-Report', value: 'Unverified pregnancy', weight: 5 },

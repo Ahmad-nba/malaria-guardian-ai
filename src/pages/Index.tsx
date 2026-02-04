@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Phone, LayoutDashboard, Shield, Activity, Users } from 'lucide-react';
+import { Phone, LayoutDashboard, Shield, Activity, Users, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { USSDSimulator } from '@/components/USSDSimulator';
@@ -18,9 +18,9 @@ const Index = () => {
   const [newPatientId, setNewPatientId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('dashboard');
 
-  const handleUSSDSubmit = (name: string, village: string, ussdData: USSDData) => {
+  const handleUSSDSubmit = (name: string, village: string, age: number, ussdData: USSDData) => {
     // Create new patient from USSD data
-    const newPatient = addNewPatient(name, village, ussdData);
+    const newPatient = addNewPatient(name, village, age, ussdData);
     
     // Calculate risk score
     const { score, level, explainability } = calculateRiskScore(
@@ -81,12 +81,20 @@ const Index = () => {
                 <p className="text-primary-foreground/80 text-sm">Mukono Health Centre III</p>
               </div>
             </div>
-            <Link to="/vht">
-              <Button variant="secondary" size="sm" className="gap-2">
-                <Users className="w-4 h-4" />
-                VHT View
-              </Button>
-            </Link>
+            <div className="flex gap-2">
+              <Link to="/hc2">
+                <Button variant="secondary" size="sm" className="gap-2">
+                  <Building2 className="w-4 h-4" />
+                  HC II
+                </Button>
+              </Link>
+              <Link to="/vht">
+                <Button variant="secondary" size="sm" className="gap-2">
+                  <Users className="w-4 h-4" />
+                  VHT View
+                </Button>
+              </Link>
+            </div>
           </div>
           <p className="text-sm text-primary-foreground/70 mt-2 max-w-2xl">
             Autonomous system for prioritizing malaria risk among pregnant women. 
