@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Phone, LayoutDashboard, Shield, Activity, Users, Building2 } from 'lucide-react';
+import { Phone, LayoutDashboard, Shield, Activity, Users, Building2, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { USSDSimulator } from '@/components/USSDSimulator';
@@ -8,6 +8,7 @@ import { PatientCard } from '@/components/PatientCard';
 import { DashboardStats } from '@/components/DashboardStats';
 import { RegionalIndicator } from '@/components/RegionalIndicator';
 import { FeedbackPanel } from '@/components/FeedbackPanel';
+import { OfflineIndicator } from '@/components/OfflineIndicator';
 import { mockPatients, localMalariaStats, addNewPatient } from '@/data/mockPatients';
 import { calculateRiskScore, getActionPackage } from '@/lib/riskCalculator';
 import type { Patient, USSDData } from '@/types/patient';
@@ -82,6 +83,12 @@ const Index = () => {
               </div>
             </div>
             <div className="flex gap-2">
+              <Link to="/install">
+                <Button variant="secondary" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Install
+                </Button>
+              </Link>
               <Link to="/hc2">
                 <Button variant="secondary" size="sm" className="gap-2">
                   <Building2 className="w-4 h-4" />
@@ -223,6 +230,9 @@ const Index = () => {
           <p className="mt-1">No diagnosis or prescription. Hierarchy-aligned coordination.</p>
         </div>
       </footer>
+
+      {/* Offline Indicator */}
+      <OfflineIndicator />
     </div>
   );
 };
