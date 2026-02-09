@@ -52,6 +52,9 @@ const languageCodes: Record<Language, string> = {
   en: 'en-UG',
   lg: 'lg-UG',
   sw: 'sw-KE',
+  nyn: 'nyn-UG',
+  ach: 'ach-UG',
+  teo: 'teo-UG',
 };
 
 export function useVoiceInput(language: Language, onResult: (text: string) => void) {
