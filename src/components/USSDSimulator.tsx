@@ -22,14 +22,15 @@ type USSDStep =
 
 interface USSDSimulatorProps {
   onSubmit: (name: string, village: string, age: number, data: USSDData) => void;
+  language: Language;
+  onLanguageChange: (lang: Language) => void;
 }
 
-export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
+export function USSDSimulator({ onSubmit, language, onLanguageChange }: USSDSimulatorProps) {
   const [step, setStep] = useState<USSDStep>('idle');
   const [input, setInput] = useState('');
   const [displayLines, setDisplayLines] = useState<string[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [language, setLanguage] = useState<Language>('en');
   
   // Form data
   const [patientName, setPatientName] = useState('');
@@ -324,7 +325,7 @@ export function USSDSimulator({ onSubmit }: USSDSimulatorProps) {
             <div className="flex items-center gap-2">
               <LanguageSwitcher 
                 currentLanguage={language} 
-                onLanguageChange={setLanguage}
+                onLanguageChange={onLanguageChange}
                 variant="compact"
               />
               <span>●●●●○</span>
