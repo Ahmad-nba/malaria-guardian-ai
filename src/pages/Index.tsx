@@ -13,11 +13,14 @@ import { mockPatients, localMalariaStats, addNewPatient } from '@/data/mockPatie
 import { calculateRiskScore, getActionPackage } from '@/lib/riskCalculator';
 import type { Patient, USSDData } from '@/types/patient';
 import { toast } from 'sonner';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import type { Language } from '@/lib/translations';
 
 const Index = () => {
   const [patients, setPatients] = useState<Patient[]>(mockPatients);
   const [newPatientId, setNewPatientId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [language, setLanguage] = useState<Language>('en');
 
   const handleUSSDSubmit = (name: string, village: string, age: number, ussdData: USSDData) => {
     // Create new patient from USSD data
@@ -82,7 +85,8 @@ const Index = () => {
                 <p className="text-primary-foreground/80 text-sm">Mukono Health Centre III</p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
               <Link to="/install">
                 <Button variant="secondary" size="sm" className="gap-2">
                   <Download className="w-4 h-4" />
