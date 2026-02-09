@@ -210,7 +210,7 @@ const Index = () => {
                 </p>
               </div>
               
-              <USSDSimulator onSubmit={handleUSSDSubmit} />
+              <USSDSimulator onSubmit={handleUSSDSubmit} language={language} onLanguageChange={setLanguage} />
               
               <div className="bg-muted/50 rounded-lg p-4 text-sm text-muted-foreground space-y-2">
                 <p className="font-medium">How it works:</p>
