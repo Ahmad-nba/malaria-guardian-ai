@@ -19,7 +19,7 @@ export function LanguageSwitcher({
   onLanguageChange,
   variant = 'default'
 }: LanguageSwitcherProps) {
-  const languages: Language[] = ['en', 'lg', 'sw'];
+  const languages: Language[] = ['en', 'lg', 'sw', 'nyn', 'ach', 'teo'];
 
   if (variant === 'compact') {
     return (
