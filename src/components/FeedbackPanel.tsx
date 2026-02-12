@@ -1,18 +1,22 @@
 import { CheckCircle2, XCircle, Clock, TrendingUp } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import type { Language } from '@/lib/translations';
+import { t } from '@/lib/translations';
 
 interface FeedbackPanelProps {
   totalPredictions: number;
   confirmedPositive: number;
   showedUp: number;
   avgTimeToShowUp: number;
+  language: Language;
 }
 
 export function FeedbackPanel({ 
   totalPredictions, 
   confirmedPositive, 
   showedUp,
-  avgTimeToShowUp 
+  avgTimeToShowUp,
+  language
 }: FeedbackPanelProps) {
   const accuracy = totalPredictions > 0 ? Math.round((confirmedPositive / totalPredictions) * 100) : 0;
   const showUpRate = totalPredictions > 0 ? Math.round((showedUp / totalPredictions) * 100) : 0;
@@ -21,16 +25,15 @@ export function FeedbackPanel({
     <div className="healthcare-card p-4">
       <div className="flex items-center gap-2 mb-4">
         <TrendingUp className="w-4 h-4 text-primary" />
-        <h3 className="font-semibold text-sm">Learning Loop Feedback</h3>
+        <h3 className="font-semibold text-sm">{t('dash.learningLoop', language)}</h3>
       </div>
 
       <div className="space-y-4">
-        {/* Prediction Accuracy */}
         <div>
           <div className="flex items-center justify-between mb-1">
             <span className="text-sm text-muted-foreground flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-risk-low" />
-              Lab-Confirmed Accuracy
+              {t('dash.labAccuracy', language)}
             </span>
             <span className="font-semibold text-sm">{accuracy}%</span>
           </div>
@@ -40,12 +43,11 @@ export function FeedbackPanel({
           </p>
         </div>
 
-        {/* Show-up Rate */}
         <div>
           <div className="flex items-center justify-between mb-1">
             <span className="text-sm text-muted-foreground flex items-center gap-2">
               <Clock className="w-4 h-4 text-risk-medium" />
-              Testing Compliance
+              {t('dash.testingCompliance', language)}
             </span>
             <span className="font-semibold text-sm">{showUpRate}%</span>
           </div>
@@ -55,10 +57,9 @@ export function FeedbackPanel({
           </p>
         </div>
 
-        {/* Average Response Time */}
         <div className="flex items-center justify-between p-2 bg-muted/50 rounded-lg">
-          <span className="text-sm text-muted-foreground">Avg. Time to Testing</span>
-          <span className="font-semibold">{avgTimeToShowUp} days</span>
+          <span className="text-sm text-muted-foreground">{t('dash.avgTimeToTesting', language)}</span>
+          <span className="font-semibold">{avgTimeToShowUp} {t('dash.days', language)}</span>
         </div>
       </div>
     </div>
