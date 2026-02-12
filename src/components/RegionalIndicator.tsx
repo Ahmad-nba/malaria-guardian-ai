@@ -1,11 +1,14 @@
 import { Cloud, Droplets, MapPin, TrendingUp } from 'lucide-react';
 import type { LocalMalariaStats } from '@/types/patient';
+import type { Language } from '@/lib/translations';
+import { t } from '@/lib/translations';
 
 interface RegionalIndicatorProps {
   stats: LocalMalariaStats;
+  language: Language;
 }
 
-export function RegionalIndicator({ stats }: RegionalIndicatorProps) {
+export function RegionalIndicator({ stats, language }: RegionalIndicatorProps) {
   return (
     <div className="healthcare-card p-4">
       <div className="flex items-center gap-2 mb-3">
@@ -16,7 +19,7 @@ export function RegionalIndicator({ stats }: RegionalIndicatorProps) {
           stats.seasonalRisk === 'moderate' ? 'risk-medium' :
           'risk-low'
         }`}>
-          {stats.seasonalRisk.toUpperCase()} SEASON
+          {stats.seasonalRisk.toUpperCase()} {t('dash.season', language)}
         </span>
       </div>
       
@@ -24,17 +27,17 @@ export function RegionalIndicator({ stats }: RegionalIndicatorProps) {
         <div className="trust-environmental rounded-lg p-2">
           <TrendingUp className="w-4 h-4 mx-auto mb-1" />
           <p className="text-xs font-medium">{stats.weeklyTrend}</p>
-          <p className="text-[10px] opacity-70">Case Trend</p>
+          <p className="text-[10px] opacity-70">{t('dash.caseTrend', language)}</p>
         </div>
         <div className="trust-environmental rounded-lg p-2">
           <Cloud className="w-4 h-4 mx-auto mb-1" />
           <p className="text-xs font-medium">{stats.rainfallIndex}%</p>
-          <p className="text-[10px] opacity-70">Rainfall</p>
+          <p className="text-[10px] opacity-70">{t('dash.rainfall', language)}</p>
         </div>
         <div className="trust-environmental rounded-lg p-2">
           <Droplets className="w-4 h-4 mx-auto mb-1" />
           <p className="text-xs font-medium">{stats.currentCases}</p>
-          <p className="text-[10px] opacity-70">Weekly Cases</p>
+          <p className="text-[10px] opacity-70">{t('dash.weeklyCases', language)}</p>
         </div>
       </div>
     </div>

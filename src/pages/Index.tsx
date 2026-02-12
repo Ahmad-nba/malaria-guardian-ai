@@ -14,7 +14,7 @@ import { calculateRiskScore, getActionPackage } from '@/lib/riskCalculator';
 import type { Patient, USSDData } from '@/types/patient';
 import { toast } from 'sonner';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import type { Language } from '@/lib/translations';
+import { type Language, t } from '@/lib/translations';
 
 const Index = () => {
   const [patients, setPatients] = useState<Patient[]>(mockPatients);
@@ -81,8 +81,8 @@ const Index = () => {
                 <Shield className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">Malaria Risk Prioritization Agent</h1>
-                <p className="text-primary-foreground/80 text-sm">Mukono Health Centre III</p>
+                <h1 className="text-xl font-bold">{t('dash.title', language)}</h1>
+                <p className="text-primary-foreground/80 text-sm">{t('dash.subtitle', language)}</p>
               </div>
             </div>
             <div className="flex gap-2 items-center">
@@ -108,8 +108,7 @@ const Index = () => {
             </div>
           </div>
           <p className="text-sm text-primary-foreground/70 mt-2 max-w-2xl">
-            Autonomous system for prioritizing malaria risk among pregnant women. 
-            Coordinating VHTs (HC I) and HC IIs while maintaining clinical accountability.
+            {t('dash.description', language)}
           </p>
         </div>
       </header>
@@ -120,18 +119,18 @@ const Index = () => {
           <TabsList className="grid w-full max-w-md grid-cols-2 mx-auto">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="w-4 h-4" />
-              Doctor's Dashboard
+              {t('dash.doctorDashboard', language)}
             </TabsTrigger>
             <TabsTrigger value="ussd" className="flex items-center gap-2">
               <Phone className="w-4 h-4" />
-              USSD Simulator
+              {t('dash.ussdSimulator', language)}
             </TabsTrigger>
           </TabsList>
 
           {/* Dashboard Tab */}
           <TabsContent value="dashboard" className="space-y-6 animate-fade-in">
             {/* Stats Overview */}
-            <DashboardStats patients={patients} localStats={localMalariaStats} />
+            <DashboardStats patients={patients} localStats={localMalariaStats} language={language} />
 
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Patient Priority Queue */}
@@ -139,10 +138,10 @@ const Index = () => {
                 <div className="flex items-center justify-between">
                   <h2 className="font-semibold text-lg flex items-center gap-2">
                     <Activity className="w-5 h-5 text-primary" />
-                    Priority Queue
+                    {t('dash.priorityQueue', language)}
                   </h2>
                   <span className="text-sm text-muted-foreground">
-                    {patients.length} patients
+                    {patients.length} {t('dash.patients', language)}
                   </span>
                 </div>
                 
@@ -159,41 +158,37 @@ const Index = () => {
 
               {/* Sidebar */}
               <div className="space-y-4">
-                <RegionalIndicator stats={localMalariaStats} />
+                <RegionalIndicator stats={localMalariaStats} language={language} />
                 <FeedbackPanel 
                   totalPredictions={24}
                   confirmedPositive={18}
                   showedUp={21}
                   avgTimeToShowUp={1.5}
+                  language={language}
                 />
                 
                 {/* Legend */}
                 <div className="healthcare-card p-4">
-                  <h3 className="font-semibold text-sm mb-3">Trust Level Legend</h3>
+                  <h3 className="font-semibold text-sm mb-3">{t('dash.trustLegend', language)}</h3>
                   <div className="space-y-2 text-xs">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-trust-high" />
-                      <span><strong>High Trust:</strong> Facility-verified data</span>
+                      <span><strong>{t('dash.highTrust', language)}:</strong> {t('dash.facilityVerified', language)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-trust-medium" />
-                      <span><strong>Medium Trust:</strong> USSD/VHT reports</span>
+                      <span><strong>{t('dash.mediumTrust', language)}:</strong> {t('dash.ussdVht', language)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-trust-environmental" />
-                      <span><strong>Environmental:</strong> Local trends</span>
+                      <span><strong>{t('dash.environmental', language)}:</strong> {t('dash.localTrends', language)}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Disclaimer */}
                 <div className="bg-muted/50 rounded-lg p-4 text-xs text-muted-foreground">
-                  <p className="font-medium mb-1">⚠ Clinical Advisory</p>
-                  <p>
-                    This system assists with prioritization only. It does not diagnose 
-                    or prescribe treatment. All clinical decisions remain with qualified 
-                    healthcare providers.
-                  </p>
+                  <p className="font-medium mb-1">⚠ {t('dash.clinicalAdvisory', language)}</p>
+                  <p>{t('dash.disclaimer', language)}</p>
                 </div>
               </div>
             </div>
@@ -203,10 +198,9 @@ const Index = () => {
           <TabsContent value="ussd" className="animate-fade-in">
             <div className="max-w-lg mx-auto space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="text-xl font-semibold">USSD Symptom Reporting</h2>
+                <h2 className="text-xl font-semibold">{t('dash.ussdTitle', language)}</h2>
                 <p className="text-muted-foreground text-sm">
-                  Simulates the *161# service for pregnant women to report symptoms 
-                  from basic mobile phones.
+                  {t('dash.ussdDesc', language)}
                 </p>
               </div>
               

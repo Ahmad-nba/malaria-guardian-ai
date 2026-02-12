@@ -1,44 +1,47 @@
 import { AlertTriangle, TrendingUp, Users, Activity } from 'lucide-react';
 import type { Patient, LocalMalariaStats } from '@/types/patient';
+import type { Language } from '@/lib/translations';
+import { t } from '@/lib/translations';
 
 interface DashboardStatsProps {
   patients: Patient[];
   localStats: LocalMalariaStats;
+  language: Language;
 }
 
-export function DashboardStats({ patients, localStats }: DashboardStatsProps) {
+export function DashboardStats({ patients, localStats, language }: DashboardStatsProps) {
   const highRisk = patients.filter(p => p.riskLevel === 'high').length;
   const mediumRisk = patients.filter(p => p.riskLevel === 'medium').length;
   const lowRisk = patients.filter(p => p.riskLevel === 'low').length;
 
   const stats = [
     {
-      label: 'High Priority',
+      label: t('dash.highPriority', language),
       value: highRisk,
       icon: AlertTriangle,
       className: 'risk-high',
-      sublabel: 'Requires immediate attention',
+      sublabel: t('dash.immediateAttention', language),
     },
     {
-      label: 'Medium Priority',
+      label: t('dash.mediumPriority', language),
       value: mediumRisk,
       icon: Activity,
       className: 'risk-medium',
-      sublabel: 'Follow-up scheduled',
+      sublabel: t('dash.followUp', language),
     },
     {
-      label: 'Low Priority',
+      label: t('dash.lowPriority', language),
       value: lowRisk,
       icon: Users,
       className: 'risk-low',
-      sublabel: 'Preventive care',
+      sublabel: t('dash.preventiveCare', language),
     },
     {
-      label: 'Regional Trend',
+      label: t('dash.regionalTrend', language),
       value: localStats.weeklyTrend === 'increasing' ? '↑' : localStats.weeklyTrend === 'decreasing' ? '↓' : '→',
       icon: TrendingUp,
       className: localStats.weeklyTrend === 'increasing' ? 'risk-high' : 'risk-low',
-      sublabel: `${localStats.currentCases} cases this week`,
+      sublabel: `${localStats.currentCases} ${t('dash.casesThisWeek', language)}`,
     },
   ];
 
