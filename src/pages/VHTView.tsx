@@ -18,6 +18,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Assignment {
   id: string;
@@ -76,6 +78,7 @@ export default function VHTView() {
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
   const [visitNotes, setVisitNotes] = useState('');
   const [showVisitForm, setShowVisitForm] = useState(false);
+  const { language, setLanguage } = useLanguage();
 
   const getPriorityClass = (priority: string) => {
     switch (priority) {
@@ -274,6 +277,7 @@ export default function VHTView() {
               <h1 className="font-bold">VHT Dashboard</h1>
               <p className="text-sm text-primary-foreground/80">Mukono HC III</p>
             </div>
+            <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
             <div className="text-right">
               <p className="text-2xl font-bold">{pendingCount}</p>
               <p className="text-xs text-primary-foreground/70">pending</p>

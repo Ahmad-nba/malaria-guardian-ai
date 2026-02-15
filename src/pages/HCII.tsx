@@ -24,6 +24,8 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { mockPatients } from '@/data/mockPatients';
 import type { Patient } from '@/types/patient';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface VitalsRecord {
   id: string;
@@ -51,6 +53,7 @@ interface OnboardingForm {
 
 const HCII = () => {
   const [activeTab, setActiveTab] = useState('patients');
+  const { language, setLanguage } = useLanguage();
   const [patients, setPatients] = useState<Patient[]>(mockPatients);
   const [vitalsRecords, setVitalsRecords] = useState<VitalsRecord[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
@@ -196,7 +199,8 @@ const HCII = () => {
                 <p className="text-white/80 text-sm">Mukono Sub-County</p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
               <Link to="/vht">
                 <Button variant="secondary" size="sm" className="gap-2">
                   <Users className="w-4 h-4" />
