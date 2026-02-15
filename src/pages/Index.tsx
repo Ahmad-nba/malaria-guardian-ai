@@ -14,13 +14,14 @@ import { calculateRiskScore, getActionPackage } from '@/lib/riskCalculator';
 import type { Patient, USSDData } from '@/types/patient';
 import { toast } from 'sonner';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { type Language, t } from '@/lib/translations';
+import { t } from '@/lib/translations';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
   const [patients, setPatients] = useState<Patient[]>(mockPatients);
   const [newPatientId, setNewPatientId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [language, setLanguage] = useState<Language>('en');
+  const { language, setLanguage } = useLanguage();
 
   const handleUSSDSubmit = (name: string, village: string, age: number, ussdData: USSDData) => {
     // Create new patient from USSD data
