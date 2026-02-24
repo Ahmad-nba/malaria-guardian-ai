@@ -186,7 +186,7 @@ const HCII = () => {
       {/* Header */}
       <header className="bg-primary text-primary-foreground">
         <div className="container py-6">
-          <div className="flex items-center justify-between gap-3 mb-2">
+          <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
             <div className="flex items-center gap-3">
               <Link to="/" className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
