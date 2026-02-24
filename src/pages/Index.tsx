@@ -76,7 +76,7 @@ const Index = () => {
       {/* Header */}
       <header className="dashboard-header text-primary-foreground">
         <div className="container py-6">
-          <div className="flex items-center justify-between gap-3 mb-2">
+          <div className="flex flex-col md:items-center justify-between gap-3 mb-2">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary-foreground/20 rounded-lg">
                 <Shield className="w-6 h-6" />
@@ -86,8 +86,12 @@ const Index = () => {
                 <p className="text-primary-foreground/80 text-sm">{t('dash.subtitle', language)}</p>
               </div>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex flex-wrap gap-2 items-center">
+            {/* flex-wrap already allows buttons to flow; language selector handles its width separately */}
+              {/* force language selector full width on small screens so other buttons wrap below */}
+            <div className="w-full sm:w-auto">
               <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+            </div>
               <Link to="/install">
                 <Button variant="secondary" size="sm" className="gap-2">
                   <Download className="w-4 h-4" />
