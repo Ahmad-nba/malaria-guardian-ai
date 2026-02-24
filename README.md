@@ -1,73 +1,102 @@
-# Welcome to your Lovable project
+# Malaria Guardian AI
 
-## Project info
+Autonomous Malaria Risk Prioritization System for pregnant women in Uganda at Mukono Health Centre III.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Project Overview
 
-## How can I edit this code?
+Malaria Guardian AI is a comprehensive digital health system designed to identify and prioritize malaria risk among pregnant women in rural Uganda. The system leverages AI-driven analytics to provide healthcare workers with real-time risk assessments and intervention recommendations.
 
-There are several ways of editing your application.
+## Key Features
 
-**Use Lovable**
+- **Risk Assessment**: AI-powered malaria risk evaluation for pregnant women
+- **Priority Triage**: Automatic patient prioritization based on risk factors
+- **Multi-Role Support**: Dedicated interfaces for VHTs, Healthcare workers, and patients
+- **Offline Capability**: PWA-enabled for areas with limited connectivity
+- **Multi-Language Support**: Localized interface for Ugandan healthcare context
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Technology Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **UI Framework**: shadcn/ui components
+- **Styling**: Tailwind CSS
+- **State Management**: React Query
+- **PWA**: Progressive Web App capabilities
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js (v18 or higher)
+- npm or yarn package manager
 
-Follow these steps:
+### Installation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+# Clone the repository
+git clone https://github.com/your-username/malaria-guardian-ai.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd malaria-guardian-ai
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Available Scripts
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run test` - Run tests
+- `npm run lint` - Run ESLint
 
-**Use GitHub Codespaces**
+## Project Structure
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+src/
+├── components/     # Reusable UI components
+├── contexts/      # React contexts (language, theme)
+├── pages/         # Main application pages
+├── hooks/         # Custom React hooks
+├── data/          # Mock data and types
+└── lib/           # Utility functions
+```
 
-## What technologies are used for this project?
+## Deployment
 
-This project is built with:
+### Production Build
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+npm run build
+```
 
-## How can I deploy this project?
+The build artifacts will be stored in the `dist/` directory.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Environment Variables
 
-## Can I connect a custom domain to my Lovable project?
+Create a `.env.production` file for production settings:
 
-Yes, you can!
+```env
+VITE_API_URL=https://your-api-endpoint.com
+VITE_ENVIRONMENT=production
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+
+For questions or support, please contact the Mukono Health Centre III digital health team.
