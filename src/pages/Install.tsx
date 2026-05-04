@@ -16,15 +16,15 @@ const Install = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background p-4">
-      <div className="max-w-md mx-auto pt-8">
+    <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background p-4 sm:p-6">
+      <div className="max-w-md mx-auto pt-4 sm:pt-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-3xl text-primary-foreground font-bold">M</span>
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
+            <span className="text-2xl sm:text-3xl text-primary-foreground font-bold">M</span>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Mukono Health</h1>
-          <p className="text-muted-foreground mt-2">Malaria Risk Prioritization System</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Mukono Health</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1.5 sm:mt-2">Malaria Risk Prioritization System</p>
         </div>
 
         {/* Connection Status */}
@@ -76,17 +76,17 @@ const Install = () => {
                 Install Now
               </Button>
             ) : (
-              <div className="bg-muted rounded-lg p-4">
+              <div className="bg-muted rounded-lg p-3 sm:p-4">
                 <p className="text-sm text-muted-foreground text-center mb-3">
                   To install on your device:
                 </p>
                 <div className="space-y-2 text-sm">
                   <div className="flex items-start gap-2">
-                    <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">1</span>
+                    <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
                     <span><strong>iPhone:</strong> Tap Share → "Add to Home Screen"</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">2</span>
+                    <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
                     <span><strong>Android:</strong> Tap menu (⋮) → "Install app" or "Add to Home Screen"</span>
                   </div>
                 </div>

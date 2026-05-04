@@ -76,37 +76,37 @@ export function PatientCard({ patient, isNew }: PatientCardProps) {
       } ${isNew ? 'animate-fade-in ring-2 ring-accent' : ''}`}
     >
       {/* Header */}
-      <div className="p-4 flex items-start justify-between gap-4">
-        <div className="flex items-start gap-3 flex-1 min-w-0">
+      <div className="p-3 sm:p-4 flex items-start justify-between gap-2 sm:gap-4">
+        <div className="flex items-start gap-2 sm:gap-3 flex-1 min-w-0">
           {/* Risk Indicator */}
-          <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${getRiskBadgeClass()}`}>
+          <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-bold text-base sm:text-lg ${getRiskBadgeClass()}`}>
             {patient.riskScore}
           </div>
           
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-semibold text-foreground truncate">{patient.name}</h3>
-              <Badge className={`${getRiskBadgeClass()} flex items-center gap-1`}>
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <h3 className="font-semibold text-foreground truncate text-sm sm:text-base">{patient.name}</h3>
+              <Badge className={`${getRiskBadgeClass()} flex items-center gap-1 text-[10px] sm:text-xs`}>
                 {getRiskIcon()}
                 {patient.riskLevel.toUpperCase()}
               </Badge>
               {isNew && (
-                <Badge variant="outline" className="bg-accent/10 text-accent border-accent">
+                <Badge variant="outline" className="bg-accent/10 text-accent border-accent text-[10px] sm:text-xs">
                   NEW
                 </Badge>
               )}
             </div>
             
-            <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground flex-wrap">
-              <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5" />
-                {patient.village}
+            <div className="flex items-center gap-x-3 gap-y-0.5 mt-1 text-xs sm:text-sm text-muted-foreground flex-wrap">
+              <span className="flex items-center gap-1 min-w-0">
+                <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="truncate">{patient.village}</span>
               </span>
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 flex-shrink-0">
                 <Baby className="w-3.5 h-3.5" />
                 Week {patient.pregnancyWeek}
               </span>
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 flex-shrink-0">
                 <Clock className="w-3.5 h-3.5" />
                 {patient.ussdData && formatTime(patient.ussdData.submittedAt)}
               </span>
@@ -118,7 +118,7 @@ export function PatientCard({ patient, isNew }: PatientCardProps) {
           variant="ghost"
           size="sm"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex-shrink-0"
+          className="flex-shrink-0 -mr-1 sm:mr-0"
         >
           {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </Button>
@@ -126,7 +126,7 @@ export function PatientCard({ patient, isNew }: PatientCardProps) {
 
       {/* USSD Symptoms Summary */}
       {patient.ussdData && (
-        <div className="px-4 pb-3 flex gap-2 flex-wrap">
+        <div className="px-3 sm:px-4 pb-3 flex gap-1.5 sm:gap-2 flex-wrap">
           {patient.ussdData.fever && (
             <span className="text-xs px-2 py-1 rounded-full risk-high">Fever</span>
           )}

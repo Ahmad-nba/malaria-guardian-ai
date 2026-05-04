@@ -145,16 +145,15 @@ export const mockPatients: Patient[] = [
   },
 ];
 
+// Returns a draft patient without an `id`. The PatientsContext is responsible
+// for assigning a non-colliding id when the patient is added to the store.
 export function addNewPatient(
   name: string,
   village: string,
   age: number,
   ussdData: Patient['ussdData']
-): Patient {
-  const id = `P${String(mockPatients.length + 1).padStart(3, '0')}`;
-  
-  const newPatient: Patient = {
-    id,
+): Omit<Patient, 'id'> {
+  return {
     name,
     village,
     healthCentre: 'Mukono HC III',
@@ -171,6 +170,4 @@ export function addNewPatient(
     explainabilityVector: [],
     actionsTaken: [],
   };
-
-  return newPatient;
 }

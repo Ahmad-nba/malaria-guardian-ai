@@ -130,25 +130,26 @@ export default function VHTView() {
   // Visit Form View
   if (showVisitForm && selectedAssignment) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background pb-6">
         {/* Header */}
         <header className="sticky top-0 z-10 bg-card border-b border-border">
-          <div className="flex items-center gap-3 p-4">
+          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4">
             <Button 
               variant="ghost" 
               size="icon"
               onClick={() => setShowVisitForm(false)}
+              className="flex-shrink-0"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <div className="flex-1">
-              <h1 className="font-semibold">Log Visit</h1>
-              <p className="text-sm text-muted-foreground">{selectedAssignment.patientName}</p>
+            <div className="flex-1 min-w-0">
+              <h1 className="font-semibold leading-tight truncate">Log Visit</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">{selectedAssignment.patientName}</p>
             </div>
           </div>
         </header>
 
-        <main className="p-4 space-y-4">
+        <main className="p-3 sm:p-4 space-y-4">
           {/* Patient Summary */}
           <div className="healthcare-card p-4">
             <div className="flex items-center gap-3 mb-3">
@@ -266,52 +267,54 @@ export default function VHTView() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-10 dashboard-header text-primary-foreground">
-        <div className="p-4">
-          <div className="flex items-center gap-3">
-            <Link to="/">
+        <div className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/" className="flex-shrink-0">
               <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary-foreground/10">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
-            <div className="flex-1">
-              <h1 className="font-bold">VHT Dashboard</h1>
-              <p className="text-sm text-primary-foreground/80">Mukono HC III</p>
+            <div className="flex-1 min-w-0">
+              <h1 className="font-bold leading-tight truncate">VHT Dashboard</h1>
+              <p className="text-xs sm:text-sm text-primary-foreground/80 truncate">Mukono HC III</p>
             </div>
-            <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
-            <div className="text-right">
-              <p className="text-2xl font-bold">{pendingCount}</p>
-              <p className="text-xs text-primary-foreground/70">pending</p>
+            <div className="flex-shrink-0">
+              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+            </div>
+            <div className="text-right flex-shrink-0">
+              <p className="text-xl sm:text-2xl font-bold leading-none">{pendingCount}</p>
+              <p className="text-[10px] sm:text-xs text-primary-foreground/70">pending</p>
             </div>
           </div>
         </div>
 
         {/* Urgent Alert */}
         {urgentCount > 0 && (
-          <div className="bg-risk-high/90 px-4 py-2 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" />
-            <span className="text-sm font-medium">{urgentCount} urgent visit(s) today</span>
+          <div className="bg-risk-high/90 px-3 sm:px-4 py-2 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-medium">{urgentCount} urgent visit(s) today</span>
           </div>
         )}
       </header>
 
       {/* Quick Stats */}
-      <div className="p-4 grid grid-cols-3 gap-3">
-        <div className="healthcare-card p-3 text-center">
-          <p className="text-xl font-bold text-risk-high">{assignments.filter(a => a.priority === 'high').length}</p>
-          <p className="text-xs text-muted-foreground">High Priority</p>
+      <div className="p-3 sm:p-4 grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="healthcare-card p-2 sm:p-3 text-center">
+          <p className="text-lg sm:text-xl font-bold text-risk-high">{assignments.filter(a => a.priority === 'high').length}</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">High Priority</p>
         </div>
-        <div className="healthcare-card p-3 text-center">
-          <p className="text-xl font-bold text-risk-medium">{assignments.filter(a => a.status === 'in_progress').length}</p>
-          <p className="text-xs text-muted-foreground">In Progress</p>
+        <div className="healthcare-card p-2 sm:p-3 text-center">
+          <p className="text-lg sm:text-xl font-bold text-risk-medium">{assignments.filter(a => a.status === 'in_progress').length}</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">In Progress</p>
         </div>
-        <div className="healthcare-card p-3 text-center">
-          <p className="text-xl font-bold text-risk-low">{assignments.filter(a => a.status === 'completed').length}</p>
-          <p className="text-xs text-muted-foreground">Completed</p>
+        <div className="healthcare-card p-2 sm:p-3 text-center">
+          <p className="text-lg sm:text-xl font-bold text-risk-low">{assignments.filter(a => a.status === 'completed').length}</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">Completed</p>
         </div>
       </div>
 
       {/* Assignments List */}
-      <main className="p-4 space-y-3">
+      <main className="p-3 sm:p-4 space-y-3">
         <h2 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
           Today's Assignments
         </h2>
@@ -328,32 +331,32 @@ export default function VHTView() {
             {/* Priority Bar */}
             <div className={`h-1 ${getPriorityClass(assignment.priority)}`} />
             
-            <div className="p-4">
+            <div className="p-3 sm:p-4">
               {/* Header */}
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${getPriorityClass(assignment.priority)}`}>
+              <div className="flex items-start justify-between gap-2 sm:gap-3 mb-3">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${getPriorityClass(assignment.priority)}`}>
                     <User className="w-5 h-5" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold">{assignment.patientName}</h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="w-3 h-3" />
-                      {assignment.village}
+                  <div className="min-w-0">
+                    <h3 className="font-semibold truncate">{assignment.patientName}</h3>
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground">
+                      <MapPin className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">{assignment.village}</span>
                     </div>
                   </div>
                 </div>
-                {getStatusBadge(assignment.status)}
+                <div className="flex-shrink-0">{getStatusBadge(assignment.status)}</div>
               </div>
 
               {/* Info */}
-              <div className="space-y-2 mb-3">
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5 mb-3">
                 <div className="flex items-center gap-2 text-sm">
-                  <Baby className="w-4 h-4 text-muted-foreground" />
+                  <Baby className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   <span>Week {assignment.pregnancyWeek}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
+                  <Clock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   <span className={assignment.deadline === 'Today' ? 'font-medium text-risk-high' : ''}>
                     {assignment.deadline}
                   </span>
@@ -375,12 +378,12 @@ export default function VHTView() {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-2">
+              <div className="grid grid-cols-2 sm:flex gap-2">
                 {assignment.phone && (
                   <Button 
                     variant="outline" 
                     size="sm"
-                    className="flex-1"
+                    className="sm:flex-1"
                     onClick={() => window.open(`tel:${assignment.phone}`)}
                   >
                     <Phone className="w-4 h-4 mr-1" />
@@ -390,7 +393,7 @@ export default function VHTView() {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  className="flex-1"
+                  className="sm:flex-1"
                   onClick={() => toast.info('Opening maps...')}
                 >
                   <Navigation className="w-4 h-4 mr-1" />
@@ -399,7 +402,7 @@ export default function VHTView() {
                 {assignment.status === 'pending' ? (
                   <Button 
                     size="sm"
-                    className="flex-1"
+                    className="col-span-2 sm:col-span-1 sm:flex-1"
                     onClick={() => handleStartVisit(assignment)}
                   >
                     Start Visit
@@ -408,7 +411,7 @@ export default function VHTView() {
                 ) : assignment.status === 'in_progress' ? (
                   <Button 
                     size="sm"
-                    className="flex-1"
+                    className="col-span-2 sm:col-span-1 sm:flex-1"
                     onClick={() => {
                       setSelectedAssignment(assignment);
                       setShowVisitForm(true);
@@ -421,7 +424,7 @@ export default function VHTView() {
                   <Button 
                     variant="outline"
                     size="sm"
-                    className="flex-1 text-risk-low"
+                    className="col-span-2 sm:col-span-1 sm:flex-1 text-risk-low"
                     disabled
                   >
                     <CheckCircle2 className="w-4 h-4 mr-1" />
@@ -435,19 +438,22 @@ export default function VHTView() {
       </main>
 
       {/* Bottom Nav Placeholder */}
-      <div className="h-20" />
-      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border p-4 flex justify-around">
-        <Button variant="ghost" className="flex-col h-auto py-2">
+      <div className="h-20 sm:h-24" />
+      <nav
+        className="fixed bottom-0 left-0 right-0 bg-card border-t border-border px-2 py-2 sm:p-4 flex justify-around"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0) + 0.5rem)' }}
+      >
+        <Button variant="ghost" className="flex-col h-auto py-1.5 sm:py-2 flex-1">
           <User className="w-5 h-5" />
-          <span className="text-xs mt-1">Assignments</span>
+          <span className="text-[10px] sm:text-xs mt-1">Assignments</span>
         </Button>
-        <Button variant="ghost" className="flex-col h-auto py-2 text-muted-foreground">
+        <Button variant="ghost" className="flex-col h-auto py-1.5 sm:py-2 text-muted-foreground flex-1">
           <CheckCircle2 className="w-5 h-5" />
-          <span className="text-xs mt-1">Completed</span>
+          <span className="text-[10px] sm:text-xs mt-1">Completed</span>
         </Button>
-        <Button variant="ghost" className="flex-col h-auto py-2 text-muted-foreground">
+        <Button variant="ghost" className="flex-col h-auto py-1.5 sm:py-2 text-muted-foreground flex-1">
           <MessageSquare className="w-5 h-5" />
-          <span className="text-xs mt-1">Messages</span>
+          <span className="text-[10px] sm:text-xs mt-1">Messages</span>
         </Button>
       </nav>
     </div>

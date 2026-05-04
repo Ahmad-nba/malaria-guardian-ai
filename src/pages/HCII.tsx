@@ -22,10 +22,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { mockPatients } from '@/data/mockPatients';
 import type { Patient } from '@/types/patient';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { usePatients } from '@/contexts/PatientsContext';
 
 interface VitalsRecord {
   id: string;
@@ -54,7 +54,7 @@ interface OnboardingForm {
 const HCII = () => {
   const [activeTab, setActiveTab] = useState('patients');
   const { language, setLanguage } = useLanguage();
-  const [patients, setPatients] = useState<Patient[]>(mockPatients);
+  const { patients, addPatient } = usePatients();
   const [vitalsRecords, setVitalsRecords] = useState<VitalsRecord[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [showVitalsForm, setShowVitalsForm] = useState(false);
@@ -82,9 +82,8 @@ const HCII = () => {
 
   const handleOnboardingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const newPatient: Patient = {
-      id: `P${String(patients.length + 1).padStart(3, '0')}`,
+
+    const draft: Omit<Patient, 'id'> = {
       name: onboardingForm.name,
       village: onboardingForm.village,
       healthCentre: 'Mukono HC II',
@@ -103,8 +102,8 @@ const HCII = () => {
       ],
     };
 
-    setPatients(prev => [newPatient, ...prev]);
-    
+    addPatient(draft);
+
     toast.success('Patient registered successfully', {
       description: `${onboardingForm.name} has been added to the system`,
     });
@@ -185,68 +184,73 @@ const HCII = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-primary text-primary-foreground">
-        <div className="container py-6">
-          <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
-            <div className="flex items-center gap-3">
-              <Link to="/" className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
+        <div className="container py-4 sm:py-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-2">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <Link to="/" className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors flex-shrink-0">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
-              <div className="p-2 bg-white/20 rounded-lg">
-                <Building2 className="w-6 h-6" />
+              <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
+                <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold">Health Centre II</h1>
-                <p className="text-white/80 text-sm">Mukono Sub-County</p>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-xl font-bold leading-tight truncate">Health Centre II</h1>
+                <p className="text-white/80 text-xs sm:text-sm truncate">Mukono Sub-County</p>
               </div>
             </div>
-            <div className="flex gap-2 items-center">
-              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
-              <Link to="/vht">
-                <Button variant="secondary" size="sm" className="gap-2">
+            <div className="flex flex-wrap gap-2 items-center">
+              <div className="w-full sm:w-auto">
+                <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+              </div>
+              <Link to="/vht" className="flex-1 sm:flex-none">
+                <Button variant="secondary" size="sm" className="gap-2 w-full sm:w-auto">
                   <Users className="w-4 h-4" />
                   VHT
                 </Button>
               </Link>
-              <Link to="/">
-                <Button variant="secondary" size="sm" className="gap-2">
+              <Link to="/" className="flex-1 sm:flex-none">
+                <Button variant="secondary" size="sm" className="gap-2 w-full sm:w-auto">
                   <Stethoscope className="w-4 h-4" />
                   HC III
                 </Button>
               </Link>
             </div>
           </div>
-          <p className="text-sm text-white/70 mt-2 max-w-2xl">
+          <p className="text-xs sm:text-sm text-white/70 mt-2 max-w-2xl">
             Patient onboarding, vitals monitoring, and reporting to Mukono HC III.
           </p>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container py-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <main className="container py-4 sm:py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
           <TabsList className="grid w-full max-w-lg grid-cols-3 mx-auto">
-            <TabsTrigger value="patients" className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              Patients
+            <TabsTrigger value="patients" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+              <Users className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">Patients</span>
             </TabsTrigger>
-            <TabsTrigger value="onboarding" className="flex items-center gap-2">
-              <UserPlus className="w-4 h-4" />
-              Register
+            <TabsTrigger value="onboarding" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+              <UserPlus className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">Register</span>
             </TabsTrigger>
-            <TabsTrigger value="vitals" className="flex items-center gap-2">
-              <Activity className="w-4 h-4" />
-              Vitals Log
+            <TabsTrigger value="vitals" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+              <Activity className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">
+                <span className="sm:hidden">Vitals</span>
+                <span className="hidden sm:inline">Vitals Log</span>
+              </span>
             </TabsTrigger>
           </TabsList>
 
           {/* Patients Tab */}
           <TabsContent value="patients" className="space-y-4 animate-fade-in">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Registered Patients</h2>
-              <Badge variant="secondary">{patients.length} patients</Badge>
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-base sm:text-lg font-semibold">Registered Patients</h2>
+              <Badge variant="secondary" className="flex-shrink-0">{patients.length} patients</Badge>
             </div>
             
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {patients.map((patient) => (
                 <Card key={patient.id} className="hover:shadow-md transition-shadow">
                   <CardHeader className="pb-2">
@@ -393,15 +397,15 @@ const HCII = () => {
 
           {/* Vitals Log Tab */}
           <TabsContent value="vitals" className="space-y-4 animate-fade-in">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Vitals Log</h2>
-              <Badge variant="secondary">{vitalsRecords.length} records</Badge>
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-base sm:text-lg font-semibold">Vitals Log</h2>
+              <Badge variant="secondary" className="flex-shrink-0">{vitalsRecords.length} records</Badge>
             </div>
 
             {vitalsRecords.length === 0 ? (
               <Card>
-                <CardContent className="py-12 text-center text-muted-foreground">
-                  <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <CardContent className="py-10 sm:py-12 text-center text-muted-foreground">
+                  <FileText className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 opacity-50" />
                   <p>No vitals recorded yet.</p>
                   <p className="text-sm">Select a patient to record their vitals.</p>
                 </CardContent>
@@ -411,35 +415,35 @@ const HCII = () => {
                 {vitalsRecords.map((record) => (
                   <Card key={record.id}>
                     <CardContent className="py-4">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mb-2">
                             <h3 className="font-semibold">{record.patientName}</h3>
                             <span className="text-xs text-muted-foreground">
                               {record.recordedAt.toLocaleDateString()} at {record.recordedAt.toLocaleTimeString()}
                             </span>
                           </div>
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                            <div className="flex items-center gap-2">
-                              <ThermometerSun className="w-4 h-4 text-muted-foreground" />
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 text-sm">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <ThermometerSun className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                               <span>{record.temperature}°C</span>
                               <Badge variant={getTemperatureStatus(record.temperature).variant} className="text-xs">
                                 {getTemperatureStatus(record.temperature).label}
                               </Badge>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Heart className="w-4 h-4 text-muted-foreground" />
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <Heart className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                               <span>{record.bloodPressureSystolic}/{record.bloodPressureDiastolic} mmHg</span>
                               <Badge variant={getBPStatus(record.bloodPressureSystolic, record.bloodPressureDiastolic).variant} className="text-xs">
                                 {getBPStatus(record.bloodPressureSystolic, record.bloodPressureDiastolic).label}
                               </Badge>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Scale className="w-4 h-4 text-muted-foreground" />
+                              <Scale className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                               <span>{record.weight} kg</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Activity className="w-4 h-4 text-muted-foreground" />
+                              <Activity className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                               <span>{record.heartRate} bpm</span>
                             </div>
                           </div>
@@ -448,7 +452,7 @@ const HCII = () => {
                           )}
                         </div>
                         {record.reportedToHCIII ? (
-                          <Badge variant="outline" className="text-trust-high border-trust-high">
+                          <Badge variant="outline" className="text-trust-high border-trust-high self-start">
                             <Check className="w-3 h-3 mr-1" />
                             Reported
                           </Badge>
@@ -457,6 +461,7 @@ const HCII = () => {
                             size="sm" 
                             variant="outline"
                             onClick={() => handleReportToHCIII(record.id)}
+                            className="w-full sm:w-auto flex-shrink-0"
                           >
                             <Send className="w-4 h-4 mr-1" />
                             Report to HC III
@@ -474,18 +479,18 @@ const HCII = () => {
 
       {/* Vitals Recording Modal */}
       {showVitalsForm && selectedPatient && (
-        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          <Card className="w-full max-w-lg sm:my-4 max-h-[95vh] sm:max-h-[90vh] flex flex-col rounded-b-none sm:rounded-lg">
+            <CardHeader className="flex-shrink-0">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
                 <ThermometerSun className="w-5 h-5" />
                 Record Vitals
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="truncate">
                 Recording vitals for {selectedPatient.name}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-y-auto">
               <form onSubmit={handleVitalsSubmit} className="space-y-4">
                 <div className="grid gap-4 grid-cols-2">
                   <div className="space-y-2">
@@ -572,7 +577,7 @@ const HCII = () => {
                   />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col-reverse sm:flex-row gap-2 sticky bottom-0 bg-card pt-2">
                   <Button 
                     type="button" 
                     variant="outline" 
