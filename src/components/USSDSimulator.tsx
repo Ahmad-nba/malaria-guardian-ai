@@ -313,27 +313,27 @@ export function USSDSimulator({ onSubmit, language, onLanguageChange }: USSDSimu
   return (
     <div className="w-full max-w-sm mx-auto">
       {/* Phone Frame */}
-      <div className="relative bg-foreground rounded-[2.5rem] p-3 shadow-2xl">
+      <div className="relative bg-foreground rounded-[2rem] sm:rounded-[2.5rem] p-2.5 sm:p-3 shadow-2xl">
         {/* Speaker */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-muted-foreground/30 rounded-full" />
+        <div className="absolute top-5 sm:top-6 left-1/2 -translate-x-1/2 w-14 sm:w-16 h-1.5 bg-muted-foreground/30 rounded-full" />
         
         {/* Screen */}
-        <div className="ussd-terminal rounded-[2rem] overflow-hidden">
+        <div className="ussd-terminal rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden">
           {/* Status Bar */}
-          <div className="flex items-center justify-between px-4 py-2 ussd-dim text-xs">
-            <span>MTN UG</span>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 ussd-dim text-[10px] sm:text-xs gap-2">
+            <span className="flex-shrink-0">MTN UG</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
               <LanguageSwitcher 
                 currentLanguage={language} 
                 onLanguageChange={onLanguageChange}
                 variant="compact"
               />
-              <span>●●●●○</span>
+              <span className="flex-shrink-0">●●●●○</span>
             </div>
           </div>
           
           {/* USSD Display */}
-          <div className="h-[420px] overflow-y-auto px-4 pb-4 font-mono text-sm leading-relaxed">
+          <div className="h-[380px] sm:h-[420px] overflow-y-auto px-3 sm:px-4 pb-4 font-mono text-xs sm:text-sm leading-relaxed">
             {step === 'idle' ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <Phone className="w-12 h-12 mb-4 ussd-accent" />
@@ -361,7 +361,7 @@ export function USSDSimulator({ onSubmit, language, onLanguageChange }: USSDSimu
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-terminal-dim/30 p-3 flex gap-2">
+          <div className="border-t border-terminal-dim/30 p-2 sm:p-3 flex gap-2">
             {step === 'idle' ? (
               <button
                 onClick={handleDial}
@@ -382,7 +382,7 @@ export function USSDSimulator({ onSubmit, language, onLanguageChange }: USSDSimu
                   language={language}
                   onResult={handleVoiceResult}
                   disabled={isTyping}
-                  className="text-terminal-accent hover:bg-terminal-accent/20"
+                  className="text-terminal-accent hover:bg-terminal-accent/20 flex-shrink-0"
                 />
                 <input
                   type="text"
@@ -391,12 +391,12 @@ export function USSDSimulator({ onSubmit, language, onLanguageChange }: USSDSimu
                   onKeyPress={handleKeyPress}
                   placeholder={t('ussd.typeResponse', language)}
                   disabled={isTyping}
-                  className="flex-1 bg-terminal-text/10 text-terminal-text placeholder:text-terminal-dim/50 px-4 py-3 rounded-lg font-mono text-sm focus:outline-none focus:ring-1 focus:ring-terminal-accent disabled:opacity-50"
+                  className="flex-1 min-w-0 bg-terminal-text/10 text-terminal-text placeholder:text-terminal-dim/50 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg font-mono text-sm focus:outline-none focus:ring-1 focus:ring-terminal-accent disabled:opacity-50"
                 />
                 <button
                   onClick={handleInput}
                   disabled={isTyping || !input.trim()}
-                  className="bg-terminal-accent/20 hover:bg-terminal-accent/30 text-terminal-accent p-3 rounded-lg transition-colors disabled:opacity-30"
+                  className="bg-terminal-accent/20 hover:bg-terminal-accent/30 text-terminal-accent p-2.5 sm:p-3 rounded-lg transition-colors disabled:opacity-30 flex-shrink-0"
                 >
                   <Send className="w-5 h-5" />
                 </button>

@@ -54,9 +54,16 @@ export function LanguageSwitcher({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="sm" className="gap-2 bg-white text-primary font-semibold hover:bg-white/90">
-          <Globe className="w-4 h-4" />
-          {languageNames[currentLanguage]}
+        <Button
+          variant="secondary"
+          size="sm"
+          className="gap-2 bg-white text-primary font-semibold hover:bg-white/90 w-full sm:w-auto"
+        >
+          <Globe className="w-4 h-4 flex-shrink-0" />
+          <span className="truncate">
+            <span className="sm:hidden">{currentLanguage.toUpperCase()}</span>
+            <span className="hidden sm:inline">{languageNames[currentLanguage]}</span>
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

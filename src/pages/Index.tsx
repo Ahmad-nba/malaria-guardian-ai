@@ -9,49 +9,45 @@ import { DashboardStats } from '@/components/DashboardStats';
 import { RegionalIndicator } from '@/components/RegionalIndicator';
 import { FeedbackPanel } from '@/components/FeedbackPanel';
 import { OfflineIndicator } from '@/components/OfflineIndicator';
-import { mockPatients, localMalariaStats, addNewPatient } from '@/data/mockPatients';
+import { localMalariaStats, addNewPatient } from '@/data/mockPatients';
 import { calculateRiskScore, getActionPackage } from '@/lib/riskCalculator';
-import type { Patient, USSDData } from '@/types/patient';
+import type { USSDData } from '@/types/patient';
 import { toast } from 'sonner';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { t } from '@/lib/translations';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { usePatients } from '@/contexts/PatientsContext';
 
 const Index = () => {
-  const [patients, setPatients] = useState<Patient[]>(mockPatients);
+  const { patients, addPatient } = usePatients();
   const [newPatientId, setNewPatientId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('dashboard');
   const { language, setLanguage } = useLanguage();
 
   const handleUSSDSubmit = (name: string, village: string, age: number, ussdData: USSDData) => {
-    // Create new patient from USSD data
-    const newPatient = addNewPatient(name, village, age, ussdData);
-    
-    // Calculate risk score
+    const draft = addNewPatient(name, village, age, ussdData);
+
     const { score, level, explainability } = calculateRiskScore(
       ussdData,
-      newPatient.trustData,
-      newPatient.pregnancyWeek,
-      newPatient.ancVisits,
+      draft.trustData,
+      draft.pregnancyWeek,
+      draft.ancVisits,
       localMalariaStats
     );
-    
-    // Get action package
+
     const actions = getActionPackage(level, name);
-    
-    // Update patient with calculated values
-    newPatient.riskScore = score;
-    newPatient.riskLevel = level;
-    newPatient.explainabilityVector = explainability;
-    newPatient.actionsTaken = actions.map(a => ({
+
+    draft.riskScore = score;
+    draft.riskLevel = level;
+    draft.explainabilityVector = explainability;
+    draft.actionsTaken = actions.map(a => ({
       ...a,
       type: a.type as any,
       status: 'completed' as const,
       timestamp: new Date(),
     }));
 
-    // Add to patients list
-    setPatients(prev => [newPatient, ...prev]);
+    const newPatient = addPatient(draft);
     setNewPatientId(newPatient.id);
     
     // Show toast and switch to dashboard
@@ -75,77 +71,76 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="dashboard-header text-primary-foreground">
-        <div className="container py-6">
-          <div className="flex flex-col md:items-center justify-between gap-3 mb-2">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary-foreground/20 rounded-lg">
-                <Shield className="w-6 h-6" />
+        <div className="container py-4 sm:py-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-2">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2 bg-primary-foreground/20 rounded-lg flex-shrink-0">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold">{t('dash.title', language)}</h1>
-                <p className="text-primary-foreground/80 text-sm">{t('dash.subtitle', language)}</p>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-xl font-bold leading-tight truncate">{t('dash.title', language)}</h1>
+                <p className="text-primary-foreground/80 text-xs sm:text-sm truncate">{t('dash.subtitle', language)}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 items-center">
-            {/* flex-wrap already allows buttons to flow; language selector handles its width separately */}
-              {/* force language selector full width on small screens so other buttons wrap below */}
-            <div className="w-full sm:w-auto">
-              <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
-            </div>
-              <Link to="/install">
-                <Button variant="secondary" size="sm" className="gap-2">
+              <div className="w-full sm:w-auto">
+                <LanguageSwitcher currentLanguage={language} onLanguageChange={setLanguage} />
+              </div>
+              <Link to="/install" className="flex-1 sm:flex-none min-w-0">
+                <Button variant="secondary" size="sm" className="gap-2 w-full sm:w-auto">
                   <Download className="w-4 h-4" />
                   Install
                 </Button>
               </Link>
-              <Link to="/hc2">
-                <Button variant="secondary" size="sm" className="gap-2">
+              <Link to="/hc2" className="flex-1 sm:flex-none min-w-0">
+                <Button variant="secondary" size="sm" className="gap-2 w-full sm:w-auto">
                   <Building2 className="w-4 h-4" />
                   HC II
                 </Button>
               </Link>
-              <Link to="/vht">
-                <Button variant="secondary" size="sm" className="gap-2">
+              <Link to="/vht" className="flex-1 sm:flex-none min-w-0">
+                <Button variant="secondary" size="sm" className="gap-2 w-full sm:w-auto">
                   <Users className="w-4 h-4" />
-                  VHT View
+                  <span className="sm:hidden">VHT</span>
+                  <span className="hidden sm:inline">VHT View</span>
                 </Button>
               </Link>
             </div>
           </div>
-          <p className="text-sm text-primary-foreground/70 mt-2 max-w-2xl">
+          <p className="text-xs sm:text-sm text-primary-foreground/70 mt-2 max-w-2xl">
             {t('dash.description', language)}
           </p>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container py-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <main className="container py-4 sm:py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
           <TabsList className="grid w-full max-w-md grid-cols-2 mx-auto">
-            <TabsTrigger value="dashboard" className="flex items-center gap-2">
-              <LayoutDashboard className="w-4 h-4" />
-              {t('dash.doctorDashboard', language)}
+            <TabsTrigger value="dashboard" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+              <LayoutDashboard className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">{t('dash.doctorDashboard', language)}</span>
             </TabsTrigger>
-            <TabsTrigger value="ussd" className="flex items-center gap-2">
-              <Phone className="w-4 h-4" />
-              {t('dash.ussdSimulator', language)}
+            <TabsTrigger value="ussd" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+              <Phone className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">{t('dash.ussdSimulator', language)}</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Dashboard Tab */}
-          <TabsContent value="dashboard" className="space-y-6 animate-fade-in">
+          <TabsContent value="dashboard" className="space-y-4 sm:space-y-6 animate-fade-in">
             {/* Stats Overview */}
             <DashboardStats patients={patients} localStats={localMalariaStats} language={language} />
 
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
               {/* Patient Priority Queue */}
-              <div className="lg:col-span-2 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-semibold text-lg flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-primary" />
-                    {t('dash.priorityQueue', language)}
+              <div className="lg:col-span-2 space-y-3 sm:space-y-4">
+                <div className="flex items-center justify-between gap-2">
+                  <h2 className="font-semibold text-base sm:text-lg flex items-center gap-2 min-w-0">
+                    <Activity className="w-5 h-5 text-primary flex-shrink-0" />
+                    <span className="truncate">{t('dash.priorityQueue', language)}</span>
                   </h2>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-xs sm:text-sm text-muted-foreground flex-shrink-0">
                     {patients.length} {t('dash.patients', language)}
                   </span>
                 </div>

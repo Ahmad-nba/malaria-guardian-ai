@@ -46,21 +46,21 @@ export function DashboardStats({ patients, localStats, language }: DashboardStat
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {stats.map((stat, i) => (
         <div 
           key={i} 
-          className="healthcare-card p-4 animate-fade-in"
+          className="healthcare-card p-3 sm:p-4 animate-fade-in"
           style={{ animationDelay: `${i * 100}ms` }}
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className={`p-2 rounded-lg ${stat.className}`}>
+          <div className="flex items-center justify-between mb-2 gap-2">
+            <span className={`p-1.5 sm:p-2 rounded-lg ${stat.className} flex-shrink-0`}>
               <stat.icon className="w-4 h-4" />
             </span>
-            <span className="text-2xl font-bold text-foreground">{stat.value}</span>
+            <span className="text-xl sm:text-2xl font-bold text-foreground">{stat.value}</span>
           </div>
-          <p className="font-medium text-sm text-foreground">{stat.label}</p>
-          <p className="text-xs text-muted-foreground">{stat.sublabel}</p>
+          <p className="font-medium text-xs sm:text-sm text-foreground leading-tight">{stat.label}</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">{stat.sublabel}</p>
         </div>
       ))}
     </div>
